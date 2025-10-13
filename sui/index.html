@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <title>Labra Dashboard</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+    h1 { text-align: center; }
+    .category { margin-bottom: 40px; }
+    .category h2 { margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+    .tiles { display: flex; flex-wrap: wrap; gap: 15px; }
+    .tile { flex: 0 0 200px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
+    .tile a { text-decoration: none; color: inherit; display: block; }
+    .tile h3 { margin: 0 0 5px 0; font-size: 16px; }
+    .tile p { margin: 0; font-size: 14px; color: #666; }
+  </style>
+</head>
+<body>
+  <h1>Dashboard - Labra</h1>
+  <div id="dashboard"></div>
+
+  <script>
+    //Käyttäjän rooli (prompt tai cookie)
+    const currentUserRole = prompt("Anna rooli (student/admin):", "student");
+
+    // Ladataan apps.json
+    fetch('apps.json')
+      .then(response => response.json())
+      .then(data => {
+        const dashboard = document.getElementById('dashboard');
+
+        //Suodatetaan vain näkyvät sovellukset
+        const visibleApps = data.apps.filter(app => app.role.includes(currentUserRole));
+
+        //Ryhmitellään kategoriittain
+        const categories = {};
+        visibleApps.forEach(app => {
+          if (!categories[app.category]) categories[app.category] = [];
+          categories[app.category].push(app);
+        });
+
+        //HTML kategorioittain
+        for (const [categoryName, apps] of Object.entries(categories)) {
+          const categoryDiv = document.createElement('div');
+          categoryDiv.className = 'category';
+          
+          const title = document.createElement('h2');
+          title.textContent = categoryName;
+          categoryDiv.appendChild(title);
+
+          const tilesDiv = document.createElement('div');
+          tilesDiv.className = 'tiles';
+
+          apps.forEach(app => {
+            const tile = document.createElement('div');
+            tile.className = 'tile';
+            tile.innerHTML = `
+              <a href="${app.url}" target="_blank">
+                <h3>${app.name}</h3>
+                <p>${app.category}</p>
+              </a>
+            `;
+
+            //klikkiseuranta
+            tile.querySelector('a').addEventListener('click', () => {
+              console.log(`User ${currentUserRole} clicked: ${app.name} (${app.url})`);
+              //täällä voit lisätä fetch() analytics-palveluun
+            });
+
+            tilesDiv.appendChild(tile);
+          });
+
+          categoryDiv.appendChild(tilesDiv);
+          dashboard.appendChild(categoryDiv);
+        }
+      })
+      .catch(err => console.error("apps.json lataus epäonnistui:", err));
+  </script>
+</body>
+</html>

@@ -1,0 +1,204 @@
+{
+  "apps": [
+    {
+      "id": "router1",
+      "name": "FS.com SF-5105",
+      "category": "Router",
+      "url": "https://10.0.0.1",
+      "icon": "router",
+      "role": ["admin","student"]
+    },
+    {
+      "id": "switch1",
+      "name": "Aruba-2930F-48G-PoEP-4SFPP",
+      "category": "Switch",
+      "url": "http://10.0.0.2/",
+      "icon": "switch",
+      "role": ["admin","student"]
+    },
+    {
+      "id": "switch2",
+      "name": "Ubiquiti EdgeSwitch",
+      "category": "Switch",
+      "url": "https://10.0.0.3",
+      "icon": "switch",
+      "role": ["admin","student"]
+    },
+    {
+      "id": "switch3",
+      "name": "D-Link DXS-1210-10",
+      "category": "Switch",
+      "url": "http://10.0.0.4/",
+      "icon": "switch",
+      "role": ["admin"]
+    },
+    {
+      "id": "switch4",
+      "name": "D-Link DGS-1510-28X",
+      "category": "Switch",
+      "url": "http://10.0.0.5/",
+      "icon": "switch",
+      "role": ["admin"]
+    },
+    {
+      "id": "switch5",
+      "name": "HP Officeconnect 1820",
+      "category": "Switch",
+      "url": "http://10.0.0.6/",
+      "icon": "switch",
+      "role": ["admin"]
+    },
+    {
+      "id": "switch6",
+      "name": "HP 2530-24G Switch",
+      "category": "Switch",
+      "url": "http://10.0.0.7",
+      "icon": "switch",
+      "role": ["admin"]
+    },
+    {
+      "id": "switch7",
+      "name": "FS.com S5860-20SQ",
+      "category": "Switch",
+      "url": "https://10.0.0.8/main.htm",
+      "icon": "switch",
+      "role": ["admin"]
+    },
+    {
+      "id": "switch8",
+      "name": "FS S3910-24TS",
+      "category": "Switch",
+      "url": "https://10.0.0.10/main.htm",
+      "icon": "switch",
+      "role": ["admin"]
+    },
+    {
+      "id": "switch9",
+      "name": "FS.com S3910-24TS",
+      "category": "Switch",
+      "url": "https://10.0.0.14/main.htm",
+      "icon": "switch",
+      "role": ["admin"]
+    },
+    {
+      "id": "nas1",
+      "name": "QNAP NAS",
+      "category": "NAS",
+      "url": "https://10.0.0.100",
+      "icon": "nas",
+      "role": ["admin","student"]
+    },
+    {
+      "id": "epdu1",
+      "name": "ePDU",
+      "category": "Power",
+      "url": "http://labrapdu.labra.local",
+      "icon": "power",
+      "role": ["admin"]
+    },
+    {
+      "id": "proxmox1",
+      "name": "Proxmox pve1",
+      "category": "Proxmox",
+      "url": "https://10.0.1.10",
+      "icon": "server",
+      "role": ["admin"]
+    },
+    {
+      "id": "proxmox2",
+      "name": "Proxmox pve2",
+      "category": "Proxmox",
+      "url": "https://10.0.1.11",
+      "icon": "server",
+      "role": ["admin"]
+    },
+    {
+      "id": "proxmox3",
+      "name": "Proxmox pve3",
+      "category": "Proxmox",
+      "url": "https://10.0.1.12",
+      "icon": "server",
+      "role": ["admin"]
+    },
+    {
+      "id": "proxmox4",
+      "name": "Proxmox pve4",
+      "category": "Proxmox",
+      "url": "https://10.0.1.13",
+      "icon": "server",
+      "role": ["admin"]
+    },
+    {
+      "id": "proxmox5",
+      "name": "Proxmox pve5",
+      "category": "Proxmox",
+      "url": "https://10.0.1.14",
+      "icon": "server",
+      "role": ["admin"]
+    },
+    {
+      "id": "proxmox6",
+      "name": "Proxmox pve6",
+      "category": "Proxmox",
+      "url": "https://10.0.1.15",
+      "icon": "server",
+      "role": ["admin"]
+    },
+    {
+      "id": "proxmox7",
+      "name": "Proxmox pve7",
+      "category": "Proxmox",
+      "url": "https://10.0.1.16",
+      "icon": "server",
+      "role": ["admin"]
+    },
+    {
+      "id": "proxmox8",
+      "name": "Proxmox pve8",
+      "category": "Proxmox",
+      "url": "https://10.0.1.17",
+      "icon": "server",
+      "role": ["admin"]
+    },
+    {
+      "id": "proxmox9",
+      "name": "Proxmox Dell R710",
+      "category": "Proxmox",
+      "url": "https://10.0.1.18",
+      "icon": "server",
+      "role": ["admin"]
+    },
+    {
+      "id": "proxmox10",
+      "name": "Proxmox Dell R720",
+      "category": "Proxmox",
+      "url": "https://10.0.1.22",
+      "icon": "server",
+      "role": ["admin"]
+    },
+    {
+      "id": "proxmox11",
+      "name": "Proxmox Dell3",
+      "category": "Proxmox",
+      "url": "https://10.0.1.24",
+      "icon": "server",
+      "role": ["admin"]
+    },
+    {
+      "id": "observium",
+      "name": "Observium Network Monitor",
+      "category": "Monitoring",
+      "url": "http://10.0.1.50:8668",
+      "icon": "monitoring",
+      "role": ["admin","student"]
+    },
+    {
+      "id": "wlan1",
+      "name": "Aruba IAP 103 WLAN",
+      "category": "WLAN",
+      "url": "https://10.0.0.150:4343/#home",
+      "icon": "wifi",
+      "role": ["admin","student"]
+    }
+  ]
+}
