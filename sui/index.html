@@ -1,488 +1,663 @@
 <!DOCTYPE html>
 <html lang="fi">
-<head>
-  <meta charset="UTF-8">
-  <title>Labra Dashboard</title>
-  <style>
-    * { box-sizing: border-box; }
-    
-    body { 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      margin: 0; 
-      padding: 20px; 
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      color: #333;
-    }
-    
-    h1 { 
-      text-align: center; 
-      color: white; 
-      font-size: 2.5em; 
-      margin-bottom: 30px; 
-      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-      font-weight: 300;
-    }
-    
-    .header-container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-    }
-    
-    .user-info {
-      background: rgba(255,255,255,0.2);
-      padding: 10px 20px;
-      border-radius: 20px;
-      color: white;
-      font-weight: 500;
-      backdrop-filter: blur(10px);
-    }
-    
-    .category { 
-      margin-bottom: 40px; 
-      background: rgba(255,255,255,0.1);
-      padding: 25px;
-      border-radius: 15px;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-    
-    .category h2 { 
-      margin: 0 0 20px 0; 
-      color: white; 
-      font-size: 1.4em; 
-      font-weight: 400;
-      text-align: center;
-    }
-    
-    .tiles { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
-      gap: 20px; 
-    }
-    
-    .tile { 
-      background: rgba(255,255,255,0.95); 
-      padding: 20px; 
-      border-radius: 12px; 
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
-      text-align: center; 
-      transition: all 0.3s ease;
-      border: 1px solid rgba(255,255,255,0.3);
-    }
-    
-    .tile:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-      background: white;
-    }
-    
-    .tile a { 
-      text-decoration: none; 
-      color: inherit; 
-      display: block; 
-    }
-    
-    .tile h3 { 
-      margin: 0 0 8px 0; 
-      font-size: 18px; 
-      color: #2c3e50;
-      font-weight: 600;
-    }
-    
-    .tile p { 
-      margin: 0; 
-      font-size: 14px; 
-      color: #7f8c8d; 
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-weight: 500;
-    }
-    
-    /* Analytics Styles */
-    .analytics-toggle { 
-      position: fixed; 
-      top: 20px; 
-      right: 20px; 
-      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-      color: white; 
-      border: none; 
-      padding: 12px 16px; 
-      border-radius: 50px; 
-      cursor: pointer; 
-      font-size: 16px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      transition: all 0.3s ease;
-      z-index: 1000;
-    }
-    
-    .analytics-toggle:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-    }
-    
-    .analytics-panel { 
-      position: fixed; 
-      top: 70px; 
-      right: 20px; 
-      background: rgba(255,255,255,0.98); 
-      border: none;
-      border-radius: 15px; 
-      padding: 20px; 
-      max-width: 350px; 
-      display: none; 
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      backdrop-filter: blur(10px);
-      z-index: 999;
-    }
-    
-    .analytics-panel h3 {
-      margin: 0 0 15px 0;
-      color: #2c3e50;
-      font-size: 18px;
-      text-align: center;
-    }
-    
-    .analytics-buttons {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-    
-    .analytics-buttons button {
-      flex: 1;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 500;
-      transition: all 0.2s ease;
-    }
-    
-    .export-btn {
-      background: #27ae60;
-      color: white;
-    }
-    
-    .clear-btn {
-      background: #e74c3c;
-      color: white;
-    }
-    
-    .analytics-buttons button:hover {
-      transform: scale(1.05);
-    }
-    
-    .analytics-summary {
-      background: linear-gradient(135deg, #74b9ff, #0984e3);
-      color: white;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-    
-    .analytics-summary h4 {
-      margin: 0 0 10px 0;
-      font-size: 14px;
-      opacity: 0.9;
-    }
-    
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    
-    .stat-item {
-      background: rgba(255,255,255,0.2);
-      padding: 8px;
-      border-radius: 6px;
-      text-align: center;
-    }
-    
-    .stat-number {
-      font-size: 20px;
-      font-weight: bold;
-      display: block;
-    }
-    
-    .stat-label {
-      font-size: 11px;
-      opacity: 0.8;
-    }
-    
-    .analytics-data { 
-      max-height: 250px; 
-      overflow-y: auto; 
-      border-radius: 8px;
-    }
-    
-    .log-entry { 
-      font-size: 13px; 
-      margin: 8px 0; 
-      padding: 12px; 
-      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-      border-radius: 8px; 
-      border-left: 4px solid #74b9ff;
-      transition: all 0.2s ease;
-    }
-    
-    .log-entry:hover {
-      background: linear-gradient(135deg, #e9ecef, #dee2e6);
-      transform: translateX(2px);
-    }
-    
-    .log-entry.login {
-      border-left-color: #00b894;
-    }
-    
-    .log-entry.click {
-      border-left-color: #fdcb6e;
-    }
-    
-    .log-time {
-      font-weight: bold;
-      color: #2d3436;
-    }
-    
-    .log-details {
-      color: #636e72;
-      margin-top: 4px;
-    }
-    
-    /* Responsive */
-    @media (max-width: 768px) {
-      .tiles {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 15px;
+  <head>
+    <meta charset="UTF-8" />
+    <title>Labra - Network Dashboard</title>
+    <style>
+      * { box-sizing: border-box; }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        color: #333;
       }
-      
-      .analytics-panel {
-        right: 10px;
-        left: 10px;
-        max-width: none;
+
+      h1 {
+        text-align: center;
+        color: white;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        font-weight: 300;
       }
-      
+
       .header-container {
-        flex-direction: column;
-        gap: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
       }
-    }
-  </style>
-</head>
-<body>
-  <div class="header-container">
-    <h1>Labra - Dashboard</h1>
-    <div class="user-info" id="user-info">
-      👤 Loading...
+
+      .user-info {
+        background: rgba(255,255,255,0.2);
+        padding: 10px 20px;
+        border-radius: 20px;
+        color: white;
+        font-weight: 500;
+        backdrop-filter: blur(10px);
+      }
+
+      .category {
+        margin-bottom: 40px;
+        background: rgba(255,255,255,0.1);
+        padding: 25px;
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.2);
+      }
+
+      .category h2 {
+        margin: 0 0 20px 0;
+        color: white;
+        font-size: 1.4em;
+        font-weight: 400;
+        text-align: center;
+      }
+
+      .tiles {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 20px;
+      }
+
+      .tile {
+        background: rgba(255,255,255,0.95);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.3);
+      }
+
+      .tile:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        background: white;
+      }
+
+      .tile a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+
+      .tile h3 {
+        margin: 0 0 8px 0;
+        font-size: 18px;
+        color: #2c3e50;
+        font-weight: 600;
+      }
+
+      .tile p {
+        margin: 0;
+        font-size: 14px;
+        color: #7f8c8d;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 500;
+      }
+
+      .status-indicator {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        margin-right: 8px;
+      }
+
+      .status-online { background: #27ae60; }
+      .status-offline { background: #e74c3c; }
+      .status-unknown { background: #f39c12; }
+
+      /* Analytics Styles */
+      .analytics-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+        color: white;
+        border: none;
+        padding: 12px 16px;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 16px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+        z-index: 1000;
+      }
+
+      .analytics-toggle:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+      }
+
+      .analytics-panel {
+        position: fixed;
+        top: 70px;
+        right: 20px;
+        background: rgba(255,255,255,0.98);
+        border: none;
+        border-radius: 15px;
+        padding: 20px;
+        max-width: 400px;
+        max-height: 80vh;
+        display: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        backdrop-filter: blur(10px);
+        z-index: 999;
+        overflow-y: auto;
+      }
+
+      .analytics-panel h3 {
+        margin: 0 0 15px 0;
+        color: #2c3e50;
+        font-size: 18px;
+        text-align: center;
+      }
+
+      .analytics-buttons {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 15px;
+      }
+
+      .analytics-buttons button {
+        flex: 1;
+        padding: 8px 12px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+      }
+
+      .export-btn {
+        background: #27ae60;
+        color: white;
+      }
+
+      .clear-btn {
+        background: #e74c3c;
+        color: white;
+      }
+
+      .analytics-buttons button:hover {
+        transform: scale(1.05);
+      }
+
+      .analytics-summary {
+        background: linear-gradient(135deg, #74b9ff, #0984e3);
+        color: white;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        text-align: center;
+      }
+
+      .analytics-summary h4 {
+        margin: 0 0 10px 0;
+        font-size: 14px;
+        opacity: 0.9;
+      }
+
+      .stats-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .stat-item {
+        background: rgba(255,255,255,0.2);
+        padding: 8px;
+        border-radius: 6px;
+        text-align: center;
+      }
+
+      .stat-number {
+        font-size: 20px;
+        font-weight: bold;
+        display: block;
+      }
+
+      .stat-label {
+        font-size: 11px;
+        opacity: 0.8;
+      }
+
+      .analytics-data {
+        max-height: 300px;
+        overflow-y: auto;
+        border-radius: 8px;
+      }
+
+      .log-entry {
+        font-size: 12px;
+        margin: 8px 0;
+        padding: 12px;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        border-radius: 8px;
+        border-left: 4px solid #74b9ff;
+        transition: all 0.2s ease;
+      }
+
+      .log-entry:hover {
+        background: linear-gradient(135deg, #e9ecef, #dee2e6);
+        transform: translateX(2px);
+      }
+
+      .log-entry.login {
+        border-left-color: #00b894;
+      }
+
+      .log-entry.click {
+        border-left-color: #fdcb6e;
+      }
+
+      .log-time {
+        font-weight: bold;
+        color: #2d3436;
+      }
+
+      .log-details {
+        color: #636e72;
+        margin-top: 4px;
+        line-height: 1.4;
+      }
+
+      .ip-address {
+        font-family: monospace;
+        background: #2d3436;
+        color: #fff;
+        padding: 1px 4px;
+        border-radius: 3px;
+        font-size: 10px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .tiles {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+          gap: 15px;
+        }
+
+        .analytics-panel {
+          right: 10px;
+          left: 10px;
+          max-width: none;
+        }
+
+        .header-container {
+          flex-direction: column;
+          gap: 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header-container">
+      <h1>Labra - Network Dashboard</h1>
+      <div class="user-info" id="user-info">👤 Loading...</div>
     </div>
-  </div>
-  
-  <!-- Analytics Toggle -->
-  <button class="analytics-toggle" onclick="toggleAnalytics()">📊</button>
-  
-  <!-- Analytics Panel -->
-  <div id="analytics-panel" class="analytics-panel">
-    <h3>📈 Analytics Dashboard</h3>
-    <div class="analytics-buttons">
-      <button class="export-btn" onclick="exportData()">💾 Export</button>
-      <button class="clear-btn" onclick="clearData()">🗑️ Clear</button>
+
+    <!-- Analytics Toggle - Näkyy vain adminille -->
+    <button
+      class="analytics-toggle"
+      id="analytics-toggle"
+      onclick="toggleAnalytics()"
+    >
+      📊 Analytics
+    </button>
+
+    <!-- Analytics Panel - Näkyy vain adminille -->
+    <div id="analytics-panel" class="analytics-panel">
+      <h3>📈 Network Analytics</h3>
+
+      <div class="analytics-buttons">
+        <button class="export-btn" onclick="exportData()">💾 Export Data</button>
+        <button class="clear-btn" onclick="clearData()">🗑️ Clear Data</button>
+      </div>
+
+      <div id="analytics-summary" class="analytics-summary"></div>
+      <div id="analytics-data" class="analytics-data"></div>
     </div>
-    <div id="analytics-summary" class="analytics-summary"></div>
-    <div id="analytics-data" class="analytics-data"></div>
-  </div>
-  
-  <div id="dashboard"></div>
 
-  <script>
-    //Käyttäjän rooli (prompt tai cookie)
-    const currentUserRole = prompt("Anna rooli (student/admin):", "student");
+    <div id="dashboard"></div>
 
-    // Päivitä käyttäjätiedot UI:hin
-    if (currentUserRole) {
-      document.getElementById('user-info').innerHTML = `👤 ${currentUserRole.charAt(0).toUpperCase() + currentUserRole.slice(1)}`;
-    }
+    <script>
+      // Yksinkertainen IP-haku
+      async function getUserIP() {
+        try {
+          const response = await fetch('https://api.ipify.org?format=json');
+          const data = await response.json();
+          return data.ip;
+        } catch (error) {
+          console.log('IP-haku epäonnistui, käytetään local-arvoa');
+          return 'local';
+        }
+      }
 
-    // Kirjautumistapahtuman seuranta
-    if (currentUserRole) {
-      const loginEvent = {
-        role: currentUserRole,
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent,
-        sessionId: Math.random().toString(36).substr(2, 9)
-      };
-      
-      console.log(`User logged in with role: ${currentUserRole}`);
-      
-      // Tallenna localStorage:iin
-      const existingLogins = JSON.parse(localStorage.getItem('userLogins') || '[]');
-      existingLogins.push(loginEvent);
-      localStorage.setItem('userLogins', JSON.stringify(existingLogins));
-      
-      // Näytä kirjautumismäärä
-      console.log(`Total logins recorded: ${existingLogins.length}`);
-    }
+      // Laiteen tila-tarkistus (yksinkertainen ping)
+      async function checkDeviceStatus(url) {
+        try {
+          // Muunnetaan URL muotoon, joka voidaan testata
+          const testUrl = url.replace('https://', '').replace('http://', '').split('/')[0];
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-    // Ladataan apps.json
-    fetch('apps.json')
-      .then(response => response.json())
-      .then(data => {
-        const dashboard = document.getElementById('dashboard');
+          const response = await fetch(`https://cors-anywhere.herokuapp.com/http://${testUrl}`, {
+            mode: 'no-cors',
+            signal: controller.signal
+          });
+          clearTimeout(timeoutId);
+          return 'online';
+        } catch (error) {
+          return 'offline';
+        }
+      }
 
-        //Suodatetaan vain näkyvät sovellukset
-        const visibleApps = data.apps.filter(app => app.role.includes(currentUserRole));
+      async function saveAnalyticsEvent(eventType, eventData) {
+        const event = {
+          type: eventType,
+          role: currentUserRole,
+          timestamp: new Date().toISOString(),
+          ...eventData
+        };
 
-        //Ryhmitellään kategoriittain
-        const categories = {};
-        visibleApps.forEach(app => {
-          if (!categories[app.category]) categories[app.category] = [];
-          categories[app.category].push(app);
-        });
-
-        //HTML kategorioittain
-        for (const [categoryName, apps] of Object.entries(categories)) {
-          const categoryDiv = document.createElement('div');
-          categoryDiv.className = 'category';
-          
-          const title = document.createElement('h2');
-          title.textContent = categoryName;
-          categoryDiv.appendChild(title);
-
-          const tilesDiv = document.createElement('div');
-          tilesDiv.className = 'tiles';
-
-          apps.forEach(app => {
-            const tile = document.createElement('div');
-            tile.className = 'tile';
-            tile.innerHTML = `
-              <a href="${app.url}" target="_blank">
-                <h3>${app.name}</h3>
-                <p>${app.category}</p>
-              </a>
-            `;
-
-            //klikkiseuranta
-            tile.querySelector('a').addEventListener('click', () => {
-              const clickEvent = {
-                role: currentUserRole,
-                action: 'click',
-                app: app.name,
-                url: app.url,
-                timestamp: new Date().toISOString()
-              };
-              
-              console.log(`User ${currentUserRole} clicked: ${app.name} (${app.url})`);
-              
-              // Tallenna klikkaus localStorage:iin
-              const existingClicks = JSON.parse(localStorage.getItem('userClicks') || '[]');
-              existingClicks.push(clickEvent);
-              localStorage.setItem('userClicks', JSON.stringify(existingClicks));
-            });
-
-            tilesDiv.appendChild(tile);
+        // Yritä backend tallennusta (Node.js API)
+        try {
+          const response = await fetch('http://localhost:3000/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(event)
           });
 
-          categoryDiv.appendChild(tilesDiv);
-          dashboard.appendChild(categoryDiv);
+          if (response.ok) {
+            console.log('Analytics saved to API');
+            return;
+          }
+        } catch (error) {
+          console.log('API save failed');
         }
-      })
-      .catch(err => console.error("apps.json lataus epäonnistui:", err));
-
-    // Analytics functions
-    function toggleAnalytics() {
-      const panel = document.getElementById('analytics-panel');
-      const isVisible = panel.style.display === 'block';
-      panel.style.display = isVisible ? 'none' : 'block';
-      
-      if (!isVisible) {
-        updateAnalyticsDisplay();
       }
-    }
 
-    function updateAnalyticsDisplay() {
-      const logins = JSON.parse(localStorage.getItem('userLogins') || '[]');
-      const clicks = JSON.parse(localStorage.getItem('userClicks') || '[]');
-      
-      // Calculate statistics
-      const totalSessions = logins.length;
-      const totalClicks = clicks.length;
-      const studentLogins = logins.filter(l => l.role === 'student').length;
-      const adminLogins = logins.filter(l => l.role === 'admin').length;
-      
-      const summary = document.getElementById('analytics-summary');
-      summary.innerHTML = `
-        <h4>📊 Usage Statistics</h4>
-        <div class="stats-grid">
-          <div class="stat-item">
-            <span class="stat-number">${totalSessions}</span>
-            <span class="stat-label">Total Sessions</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">${totalClicks}</span>
-            <span class="stat-label">App Clicks</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">${studentLogins}</span>
-            <span class="stat-label">Students</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-number">${adminLogins}</span>
-            <span class="stat-label">Admins</span>
-          </div>
-        </div>
-      `;
-      
-      const dataDiv = document.getElementById('analytics-data');
-      const allEvents = [...logins, ...clicks].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      
-      dataDiv.innerHTML = allEvents.slice(0, 20).map(event => {
-        const time = new Date(event.timestamp).toLocaleString('fi-FI');
-        const isLogin = !event.action;
-        const icon = isLogin ? '🔑' : '👆';
-        const eventType = isLogin ? 'login' : 'click';
-        const details = isLogin ? 'Signed in' : `Clicked: ${event.app}`;
-        
-        return `
-          <div class="log-entry ${eventType}">
-            <div class="log-time">${icon} ${time}</div>
-            <div class="log-details">${event.role} - ${details}</div>
+      // Käyttäjän rooli - testausta varten helpompi tapa
+      let currentUserRole = localStorage.getItem('userRole');
+      if (!currentUserRole) {
+        // Yksinkertainen testausvalikko
+        currentUserRole = Math.random() > 0.5 ? 'admin' : 'student';
+        localStorage.setItem('userRole', currentUserRole);
+      }
+
+      // Päivitä käyttäjätiedot UI:hin
+      document.getElementById('user-info').innerHTML = `👤 ${currentUserRole.charAt(0).toUpperCase() + currentUserRole.slice(1)}`;
+
+      // Piilota analytics studenteille
+      if (currentUserRole === 'student') {
+        document.getElementById('analytics-toggle').style.display = 'none';
+        document.getElementById('analytics-panel').style.display = 'none';
+      }
+
+      // Kirjautumisen seuranta - KORJATTU
+      if (currentUserRole) {
+        getUserIP().then(ip => {
+          saveAnalyticsEvent('login', {
+            ip: ip,
+            userAgent: navigator.userAgent,
+            sessionId: Math.random().toString(36).substr(2, 9)
+          });
+        });
+      }
+
+      // Ladataan ja näytetään verkkolaitteet
+      fetch('apps.json')
+        .then(response => response.json())
+        .then(data => {
+          const dashboard = document.getElementById('dashboard');
+
+          // Suodatetaan käyttäjän roolin mukaan
+          const visibleApps = data.apps.filter(app => app.role.includes(currentUserRole));
+
+          // Ryhmitellään kategoriittain
+          const categories = {};
+          visibleApps.forEach(app => {
+            if (!categories[app.category]) categories[app.category] = [];
+            categories[app.category].push(app);
+          });
+
+          // Luodaan HTML kategorioittain
+          for (const [categoryName, apps] of Object.entries(categories)) {
+            const categoryDiv = document.createElement('div');
+            categoryDiv.className = 'category';
+
+            const title = document.createElement('h2');
+            title.textContent = categoryName;
+            categoryDiv.appendChild(title);
+
+            const tilesDiv = document.createElement('div');
+            tilesDiv.className = 'tiles';
+
+            apps.forEach(app => {
+              const tile = document.createElement('div');
+              tile.className = 'tile';
+              tile.innerHTML = `
+                <a href="${app.url}" target="_blank">
+                  <h3>${app.name}</h3>
+                  <p>${app.category}</p>
+                  <div class="status-indicator status-unknown" id="status-${app.id}"></div>
+                  <small>${app.url.replace('https://', '').replace('http://', '')}</small>
+                </a>
+              `;
+
+              // Klikkausseuranta
+              tile.querySelector('a').addEventListener('click', () => {
+                getUserIP().then(ip => {
+                  saveAnalyticsEvent('device_access', {
+                    device: app.name,
+                    deviceId: app.id,
+                    category: app.category,
+                    url: app.url,
+                    ip: ip
+                  });
+                });
+              });
+
+              tilesDiv.appendChild(tile);
+
+              // Tarkistetaan laitteen tila
+              setTimeout(() => {
+                checkDeviceStatus(app.url).then(status => {
+                  const indicator = document.getElementById(`status-${app.id}`);
+                  indicator.className = `status-indicator status-${status}`;
+                  indicator.title = status === 'online' ? 'Laite vastaa' : 'Laite ei vastaa';
+                });
+              }, 1000);
+            });
+
+            categoryDiv.appendChild(tilesDiv);
+            dashboard.appendChild(categoryDiv);
+          }
+        })
+        .catch(err => {
+          console.error("apps.json lataus epäonnistui:", err);
+          document.getElementById('dashboard').innerHTML = `
+            <div class="category">
+              <h2>Error</h2>
+              <div class="tile">
+                <h3>Could not load devices</h3>
+                <p>Check console for details</p>
+              </div>
+            </div>
+          `;
+        });
+
+      // Analytics functions
+      function toggleAnalytics() {
+        if (currentUserRole === 'student') return;
+
+        const panel = document.getElementById('analytics-panel');
+        panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+
+        if (panel.style.display === 'block') {
+          updateAnalyticsDisplay();
+        }
+      }
+
+      async function updateAnalyticsDisplay() {
+        if (currentUserRole === 'student') return;
+
+        try {
+          // Lataa data API:sta
+          const response = await fetch('http://localhost:3000/analytics');
+          if (response.ok) {
+            const apiData = await response.json();
+
+            // Käytä API:n dataa suoraan
+            const logins = apiData.logins || [];
+            const clicks = apiData.clicks || [];
+
+            // Lasketaan tilastot (SAMA LOGIIKKA KUIN ENNEN)
+            const totalSessions = logins.length;
+            const totalClicks = clicks.length;
+            const uniqueIPs = [...new Set([...logins, ...clicks].map(event => event.ip))].filter(ip => ip);
+
+            // Suosituimmat laitteet
+            const deviceClicks = {};
+            clicks.forEach(click => {
+              deviceClicks[click.device] = (deviceClicks[click.device] || 0) + 1;
+            });
+            const popularDevices = Object.entries(deviceClicks)
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 5);
+
+            const summary = document.getElementById('analytics-summary');
+            summary.innerHTML = `
+              <h4>📊 Network Statistics</h4>
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <span class="stat-number">${totalSessions}</span>
+                  <span class="stat-label">Sessions</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">${totalClicks}</span>
+                  <span class="stat-label">Device Access</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">${uniqueIPs.length}</span>
+                  <span class="stat-label">Unique IPs</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">${popularDevices.length > 0 ? popularDevices[0][1] : 0}</span>
+                  <span class="stat-label">Top Device</span>
+                </div>
+              </div>
+            `;
+
+            const dataDiv = document.getElementById('analytics-data');
+            const recentEvents = [...logins, ...clicks]
+              .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+              .slice(0, 15);
+
+            dataDiv.innerHTML = recentEvents.map(event => {
+              const time = new Date(event.timestamp).toLocaleString('fi-FI');
+              const isLogin = event.type === 'login';
+              const icon = isLogin ? '🔑' : '👆';
+              const action = isLogin ? 'signed in' : `accessed ${event.device}`;
+
+              return `
+                <div class="log-entry ${isLogin ? 'login' : 'click'}">
+                  <div class="log-time">${icon} ${time}</div>
+                  <div class="log-details">
+                    <strong>${event.role}</strong> ${action}
+                    <div style="font-size: 11px; color: #888; margin-top: 2px;">
+                      IP: <span class="ip-address">${event.ip}</span>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('') || '<div style="text-align: center; padding: 20px; color: #888;">No activity data</div>';
+
+            return;
+          }
+        } catch (error) {
+          console.log('API data load failed');
+        }
+
+        // Jos API ei toimi, näytä tyhjä data
+        const summary = document.getElementById('analytics-summary');
+        summary.innerHTML = `
+          <h4>📊 Network Statistics</h4>
+          <div style="text-align: center; padding: 20px; color: white;">
+            Analytics data temporarily unavailable
           </div>
         `;
-      }).join('');
-      
-      if (allEvents.length > 20) {
-        dataDiv.innerHTML += `<div style="text-align: center; padding: 10px; color: #636e72; font-size: 12px;">... and ${allEvents.length - 20} more events</div>`;
-      }
-    }
 
-    function exportData() {
-      const logins = JSON.parse(localStorage.getItem('userLogins') || '[]');
-      const clicks = JSON.parse(localStorage.getItem('userClicks') || '[]');
-      
-      const data = { logins, clicks };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `analytics-${new Date().toISOString().split('T')[0]}.json`;
-      a.click();
-      
-      URL.revokeObjectURL(url);
-    }
-
-    function clearData() {
-      if (confirm('Are you sure you want to clear all analytics data?')) {
-        localStorage.removeItem('userLogins');
-        localStorage.removeItem('userClicks');
-        updateAnalyticsDisplay();
+        document.getElementById('analytics-data').innerHTML =
+          '<div style="text-align: center; padding: 20px; color: #888;">Unable to load analytics data</div>';
       }
-    }
-  </script>
-</body>
+
+      function exportData() {
+        if (currentUserRole === 'student') return;
+
+        const logins = JSON.parse(localStorage.getItem('networkLogins') || '[]');
+        const clicks = JSON.parse(localStorage.getItem('networkClicks') || '[]');
+
+        const data = {
+          logins,
+          clicks,
+          exportDate: new Date().toISOString(),
+          summary: {
+            totalSessions: logins.length,
+            totalDeviceAccess: clicks.length,
+            uniqueIPs: [...new Set([...logins, ...clicks].map(event => event.ip))].length
+          }
+        };
+
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `network-analytics-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+
+        URL.revokeObjectURL(url);
+      }
+
+      function clearData() {
+        if (currentUserRole === 'student') return;
+
+        if (confirm('Clear all network analytics data?')) {
+          localStorage.removeItem('networkLogins');
+          localStorage.removeItem('networkClicks');
+          updateAnalyticsDisplay();
+        }
+      }
+
+      // Testausnapin lisäys (kehitystä varten)
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        const testBtn = document.createElement('button');
+        testBtn.textContent = '🔄 Test Role';
+        testBtn.style.position = 'fixed';
+        testBtn.style.bottom = '20px';
+        testBtn.style.left = '20px';
+        testBtn.style.background = '#3498db';
+        testBtn.style.color = 'white';
+        testBtn.style.border = 'none';
+        testBtn.style.padding = '10px 15px';
+        testBtn.style.borderRadius = '5px';
+        testBtn.style.cursor = 'pointer';
+        testBtn.onclick = () => {
+          localStorage.removeItem('userRole');
+          location.reload();
+        };
+        document.body.appendChild(testBtn);
+      }
+    </script>
+  </body>
 </html>

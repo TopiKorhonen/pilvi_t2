@@ -1,24 +1,24 @@
 services:
-
-  sui:
-    container_name: sui
-    restart: always
-    build:
-      context: ./
-    environment:
-      - VIRTUAL_HOST=test.laserr.net
-    networks:
-      - nginx-proxy
-      - public
-      
+  labra-dashboard:
+    container_name: labra-dashboard
+    restart: unless-stopped
+    image: nginx:alpine
     ports:
-      - 4000:80
+      - "4080:80"
     volumes:
-      - ./:/opt/html
+      - ./:/usr/share/nginx/html
+      - ./analytics-data:/app/data
 
-networks:
-  nginx-proxy:
-    external: false
-  public:
-    external: false
-      
+  analytics-api:
+    container_name: analytics-api
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./analytics-data:/app/data
+    environment:
+      - PORT=3000
+      - NODE_ENV=production

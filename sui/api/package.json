@@ -1,0 +1,10 @@
+{
+  "name": "analytics-api",
+  "version": "1.0.0",
+  "description": "Analytics API for Labra Dashboard",
+  "main": "node.js",
+  "scripts": {
+    "start": "node node.js"
+  },
+  "dependencies": {}
+}
