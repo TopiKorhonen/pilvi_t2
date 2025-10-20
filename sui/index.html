@@ -4,24 +4,329 @@
   <meta charset="UTF-8">
   <title>Labra Dashboard</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    h1 { text-align: center; }
-    .category { margin-bottom: 40px; }
-    .category h2 { margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
-    .tiles { display: flex; flex-wrap: wrap; gap: 15px; }
-    .tile { flex: 0 0 200px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-    .tile a { text-decoration: none; color: inherit; display: block; }
-    .tile h3 { margin: 0 0 5px 0; font-size: 16px; }
-    .tile p { margin: 0; font-size: 14px; color: #666; }
+    * { box-sizing: border-box; }
+    
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      margin: 0; 
+      padding: 20px; 
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #333;
+    }
+    
+    h1 { 
+      text-align: center; 
+      color: white; 
+      font-size: 2.5em; 
+      margin-bottom: 30px; 
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      font-weight: 300;
+    }
+    
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .user-info {
+      background: rgba(255,255,255,0.2);
+      padding: 10px 20px;
+      border-radius: 20px;
+      color: white;
+      font-weight: 500;
+      backdrop-filter: blur(10px);
+    }
+    
+    .category { 
+      margin-bottom: 40px; 
+      background: rgba(255,255,255,0.1);
+      padding: 25px;
+      border-radius: 15px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .category h2 { 
+      margin: 0 0 20px 0; 
+      color: white; 
+      font-size: 1.4em; 
+      font-weight: 400;
+      text-align: center;
+    }
+    
+    .tiles { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+      gap: 20px; 
+    }
+    
+    .tile { 
+      background: rgba(255,255,255,0.95); 
+      padding: 20px; 
+      border-radius: 12px; 
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15); 
+      text-align: center; 
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    
+    .tile:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      background: white;
+    }
+    
+    .tile a { 
+      text-decoration: none; 
+      color: inherit; 
+      display: block; 
+    }
+    
+    .tile h3 { 
+      margin: 0 0 8px 0; 
+      font-size: 18px; 
+      color: #2c3e50;
+      font-weight: 600;
+    }
+    
+    .tile p { 
+      margin: 0; 
+      font-size: 14px; 
+      color: #7f8c8d; 
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 500;
+    }
+    
+    /* Analytics Styles */
+    .analytics-toggle { 
+      position: fixed; 
+      top: 20px; 
+      right: 20px; 
+      background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+      color: white; 
+      border: none; 
+      padding: 12px 16px; 
+      border-radius: 50px; 
+      cursor: pointer; 
+      font-size: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .analytics-toggle:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+    
+    .analytics-panel { 
+      position: fixed; 
+      top: 70px; 
+      right: 20px; 
+      background: rgba(255,255,255,0.98); 
+      border: none;
+      border-radius: 15px; 
+      padding: 20px; 
+      max-width: 350px; 
+      display: none; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+      z-index: 999;
+    }
+    
+    .analytics-panel h3 {
+      margin: 0 0 15px 0;
+      color: #2c3e50;
+      font-size: 18px;
+      text-align: center;
+    }
+    
+    .analytics-buttons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .analytics-buttons button {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    
+    .export-btn {
+      background: #27ae60;
+      color: white;
+    }
+    
+    .clear-btn {
+      background: #e74c3c;
+      color: white;
+    }
+    
+    .analytics-buttons button:hover {
+      transform: scale(1.05);
+    }
+    
+    .analytics-summary {
+      background: linear-gradient(135deg, #74b9ff, #0984e3);
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .analytics-summary h4 {
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    
+    .stat-item {
+      background: rgba(255,255,255,0.2);
+      padding: 8px;
+      border-radius: 6px;
+      text-align: center;
+    }
+    
+    .stat-number {
+      font-size: 20px;
+      font-weight: bold;
+      display: block;
+    }
+    
+    .stat-label {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+    
+    .analytics-data { 
+      max-height: 250px; 
+      overflow-y: auto; 
+      border-radius: 8px;
+    }
+    
+    .log-entry { 
+      font-size: 13px; 
+      margin: 8px 0; 
+      padding: 12px; 
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      border-radius: 8px; 
+      border-left: 4px solid #74b9ff;
+      transition: all 0.2s ease;
+    }
+    
+    .log-entry:hover {
+      background: linear-gradient(135deg, #e9ecef, #dee2e6);
+      transform: translateX(2px);
+    }
+    
+    .log-entry.login {
+      border-left-color: #00b894;
+    }
+    
+    .log-entry.click {
+      border-left-color: #fdcb6e;
+    }
+    
+    .log-time {
+      font-weight: bold;
+      color: #2d3436;
+    }
+    
+    .log-details {
+      color: #636e72;
+      margin-top: 4px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .tiles {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+      }
+      
+      .analytics-panel {
+        right: 10px;
+        left: 10px;
+        max-width: none;
+      }
+      
+      .header-container {
+        flex-direction: column;
+        gap: 15px;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>Dashboard - Labra</h1>
+  <div class="header-container">
+    <h1>Labra - Dashboard</h1>
+    <div class="user-info" id="user-info">
+      👤 Loading...
+    </div>
+  </div>
+  
+  <!-- Analytics Toggle -->
+  <button class="analytics-toggle" onclick="toggleAnalytics()">📊</button>
+  
+  <!-- Analytics Panel -->
+  <div id="analytics-panel" class="analytics-panel">
+    <h3>📈 Analytics Dashboard</h3>
+    <div class="analytics-buttons">
+      <button class="export-btn" onclick="exportData()">💾 Export</button>
+      <button class="clear-btn" onclick="clearData()">🗑️ Clear</button>
+    </div>
+    <div id="analytics-summary" class="analytics-summary"></div>
+    <div id="analytics-data" class="analytics-data"></div>
+  </div>
+  
   <div id="dashboard"></div>
 
   <script>
     //Käyttäjän rooli (prompt tai cookie)
     const currentUserRole = prompt("Anna rooli (student/admin):", "student");
+
+    // Päivitä käyttäjätiedot UI:hin
+    if (currentUserRole) {
+      document.getElementById('user-info').innerHTML = `👤 ${currentUserRole.charAt(0).toUpperCase() + currentUserRole.slice(1)}`;
+    }
+
+    // Kirjautumistapahtuman seuranta
+    if (currentUserRole) {
+      const loginEvent = {
+        role: currentUserRole,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        sessionId: Math.random().toString(36).substr(2, 9)
+      };
+      
+      console.log(`User logged in with role: ${currentUserRole}`);
+      
+      // Tallenna localStorage:iin
+      const existingLogins = JSON.parse(localStorage.getItem('userLogins') || '[]');
+      existingLogins.push(loginEvent);
+      localStorage.setItem('userLogins', JSON.stringify(existingLogins));
+      
+      // Näytä kirjautumismäärä
+      console.log(`Total logins recorded: ${existingLogins.length}`);
+    }
 
     // Ladataan apps.json
     fetch('apps.json')
@@ -63,8 +368,20 @@
 
             //klikkiseuranta
             tile.querySelector('a').addEventListener('click', () => {
+              const clickEvent = {
+                role: currentUserRole,
+                action: 'click',
+                app: app.name,
+                url: app.url,
+                timestamp: new Date().toISOString()
+              };
+              
               console.log(`User ${currentUserRole} clicked: ${app.name} (${app.url})`);
-              //täällä voit lisätä fetch() analytics-palveluun
+              
+              // Tallenna klikkaus localStorage:iin
+              const existingClicks = JSON.parse(localStorage.getItem('userClicks') || '[]');
+              existingClicks.push(clickEvent);
+              localStorage.setItem('userClicks', JSON.stringify(existingClicks));
             });
 
             tilesDiv.appendChild(tile);
@@ -75,6 +392,97 @@
         }
       })
       .catch(err => console.error("apps.json lataus epäonnistui:", err));
+
+    // Analytics functions
+    function toggleAnalytics() {
+      const panel = document.getElementById('analytics-panel');
+      const isVisible = panel.style.display === 'block';
+      panel.style.display = isVisible ? 'none' : 'block';
+      
+      if (!isVisible) {
+        updateAnalyticsDisplay();
+      }
+    }
+
+    function updateAnalyticsDisplay() {
+      const logins = JSON.parse(localStorage.getItem('userLogins') || '[]');
+      const clicks = JSON.parse(localStorage.getItem('userClicks') || '[]');
+      
+      // Calculate statistics
+      const totalSessions = logins.length;
+      const totalClicks = clicks.length;
+      const studentLogins = logins.filter(l => l.role === 'student').length;
+      const adminLogins = logins.filter(l => l.role === 'admin').length;
+      
+      const summary = document.getElementById('analytics-summary');
+      summary.innerHTML = `
+        <h4>📊 Usage Statistics</h4>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <span class="stat-number">${totalSessions}</span>
+            <span class="stat-label">Total Sessions</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">${totalClicks}</span>
+            <span class="stat-label">App Clicks</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">${studentLogins}</span>
+            <span class="stat-label">Students</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-number">${adminLogins}</span>
+            <span class="stat-label">Admins</span>
+          </div>
+        </div>
+      `;
+      
+      const dataDiv = document.getElementById('analytics-data');
+      const allEvents = [...logins, ...clicks].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      dataDiv.innerHTML = allEvents.slice(0, 20).map(event => {
+        const time = new Date(event.timestamp).toLocaleString('fi-FI');
+        const isLogin = !event.action;
+        const icon = isLogin ? '🔑' : '👆';
+        const eventType = isLogin ? 'login' : 'click';
+        const details = isLogin ? 'Signed in' : `Clicked: ${event.app}`;
+        
+        return `
+          <div class="log-entry ${eventType}">
+            <div class="log-time">${icon} ${time}</div>
+            <div class="log-details">${event.role} - ${details}</div>
+          </div>
+        `;
+      }).join('');
+      
+      if (allEvents.length > 20) {
+        dataDiv.innerHTML += `<div style="text-align: center; padding: 10px; color: #636e72; font-size: 12px;">... and ${allEvents.length - 20} more events</div>`;
+      }
+    }
+
+    function exportData() {
+      const logins = JSON.parse(localStorage.getItem('userLogins') || '[]');
+      const clicks = JSON.parse(localStorage.getItem('userClicks') || '[]');
+      
+      const data = { logins, clicks };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `analytics-${new Date().toISOString().split('T')[0]}.json`;
+      a.click();
+      
+      URL.revokeObjectURL(url);
+    }
+
+    function clearData() {
+      if (confirm('Are you sure you want to clear all analytics data?')) {
+        localStorage.removeItem('userLogins');
+        localStorage.removeItem('userClicks');
+        updateAnalyticsDisplay();
+      }
+    }
   </script>
 </body>
 </html>

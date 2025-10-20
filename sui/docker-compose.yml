@@ -10,6 +10,7 @@ services:
     networks:
       - nginx-proxy
       - public
+      
     ports:
       - 4000:80
     volumes:
@@ -17,7 +18,7 @@ services:
 
 networks:
   nginx-proxy:
-    external: true
+    external: false
   public:
-    external:
-      name: public
+    external: false
+      
